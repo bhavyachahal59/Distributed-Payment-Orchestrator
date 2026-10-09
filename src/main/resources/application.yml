@@ -21,3 +21,4 @@ orchestrator:
   reconciliation-delay-ms: 15000
   retry-delay-ms: 5000
   max-attempts: 3
+  processing-lease-ms: 30000

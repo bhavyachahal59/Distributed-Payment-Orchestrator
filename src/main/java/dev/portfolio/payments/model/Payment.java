@@ -23,4 +23,11 @@ public class Payment {
  public UUID getId(){return id;} public String getIdempotencyKey(){return idempotencyKey;} public String getMerchantId(){return merchantId;} public BigDecimal getAmount(){return amount;} public String getCurrency(){return currency;} public PaymentStatus getStatus(){return status;} public int getAttempts(){return attempts;} public String getProviderReference(){return providerReference;} public String getFailureReason(){return failureReason;} public Instant getNextAttemptAt(){return nextAttemptAt;} public Instant getCreatedAt(){return createdAt;} public Instant getUpdatedAt(){return updatedAt;}
  public void transition(PaymentStatus s,String reason,String ref,Instant next){status=s;failureReason=reason;if(ref!=null)providerReference=ref;nextAttemptAt=next;updatedAt=Instant.now();}
  public void incrementAttempts(){attempts++;updatedAt=Instant.now();}
+
+ public boolean isProcessingLeaseExpired(Instant now) {
+  return status == PaymentStatus.PROCESSING
+          && nextAttemptAt != null
+          && !nextAttemptAt.isAfter(now);
+ }
+
 }
